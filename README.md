@@ -1,36 +1,48 @@
 # Spotify AI Support Agent
 
-An AI-powered customer-support agent built for the Hiver SDE Intern assignment. The application analyzes customer-support conversations, identifies the customer’s issue, generates a suitable response, and detects cases that may require escalation.
+An AI-powered customer-support assistant developed for the Hiver SDE Intern assignment.
 
-## Project Overview
+The application processes Spotify customer-support messages, identifies the customer’s issue, generates an appropriate response using Google Gemini, and detects cases that may require escalation to a human support agent.
 
-Customer-support teams receive a large number of repetitive questions and complaints. This project uses an AI-assisted workflow to help support agents respond more quickly and consistently.
+## Live Demo
 
-The system processes customer messages and supports the following workflow:
+**Streamlit App:**
+https://hiver-support-agent-cvquauosx3eb3mmrqewath.streamlit.app/
 
-1. Receive a customer-support message.
-2. Classify the customer’s issue.
-3. Retrieve relevant information from the available dataset.
-4. Generate an AI-assisted response.
-5. Detect whether the issue may require escalation.
-6. Display the response and support information through a Streamlit interface.
+## GitHub Repository
+
+https://github.com/ishika74/hiver-support-agent
+
+## Problem Statement
+
+Customer-support teams receive a large number of repetitive questions and complaints. Manually classifying every issue and preparing a response can be time-consuming.
+
+This project demonstrates an AI-assisted support workflow that helps automate the initial stages of customer support:
+
+1. Understand the customer’s message.
+2. Classify the issue.
+3. Retrieve relevant information from previous support conversations.
+4. Generate a response.
+5. Identify whether human escalation may be required.
 
 ## Features
 
-* Interactive Streamlit web application
-* Customer-issue classification
+* Interactive Streamlit user interface
+* Spotify customer-support issue classification
 * AI-generated support responses
-* Support for common Spotify-related issues
+* Dataset-based retrieval
 * Escalation detection
 * Support-ticket assistance
 * Conversation-style interaction
-* Feedback controls
-* Dataset-based support analysis
-* Evaluation scripts for testing response quality
+* Customer feedback controls
+* Evaluation scripts for testing the system
+* Google Gemini API integration
 
 ## Dataset
 
-The project uses a customer-support conversation dataset containing fields such as:
+The project uses a customer-support conversation dataset containing Twitter-based customer messages and conversation relationships.
+
+The dataset includes fields such as:
 
 * `tweet_id`
 * `author_id`
@@ -46,7 +58,28 @@ The dataset is stored in:
 data/sample(1).csv
 ```
 
-The `text` field contains the customer-support messages. The response and conversation ID fields help represent relationships between customer messages and support replies.
+The `text` column contains the customer-support messages. The response and conversation ID columns provide information about relationships between customer messages and replies.
+
+## System Workflow
+
+```text
+Customer Message
+       |
+       v
+Issue Classification
+       |
+       v
+Relevant Data Retrieval
+       |
+       v
+Escalation Detection
+       |
+       v
+AI Response Generation
+       |
+       v
+Support Response
+```
 
 ## Project Structure
 
@@ -54,6 +87,7 @@ The `text` field contains the customer-support messages. The response and conver
 hiver-support-agent/
 │
 ├── app/
+│
 ├── data/
 │   └── sample(1).csv
 │
@@ -87,19 +121,49 @@ hiver-support-agent/
 * Scikit-learn
 * Python-dotenv
 
-## AI Model
+## Main Components
 
-The application uses the Google Gemini API to generate support responses.
+### `app.py`
 
-The model name is configured in:
+Provides the Streamlit user interface and allows users to enter customer-support questions and view generated responses.
 
-```text
-src/llm_client.py
-```
+### `llm_client.py`
 
-The API key is loaded through an environment variable or Streamlit Secrets.
+Handles communication with the Google Gemini API.
 
-## Local Setup
+### `classifier.py`
+
+Classifies customer messages into support-related issue categories.
+
+### `retrieval.py`
+
+Retrieves relevant information from the available support dataset.
+
+### `reply_generator.py`
+
+Generates customer-support replies using the retrieved information and AI model.
+
+### `escalation.py`
+
+Identifies issues that may require human support-agent involvement.
+
+### `pipeline.py`
+
+Connects the main processing stages into a single workflow.
+
+### `ingest.py`
+
+Handles dataset preparation and ingestion.
+
+### `run_eval.py`
+
+Runs evaluation procedures for the support-agent system.
+
+### `llm_judge.py`
+
+Supports evaluation of generated responses using an AI-based judging process.
+
+## Local Installation
 
 ### 1. Clone the repository
 
@@ -116,13 +180,13 @@ python -m venv venv
 
 ### 3. Activate the virtual environment
 
-On Windows PowerShell:
+For Windows PowerShell:
 
 ```powershell
 .\venv\Scripts\Activate.ps1
 ```
 
-On macOS or Linux:
+For macOS or Linux:
 
 ```bash
 source venv/bin/activate
@@ -142,7 +206,7 @@ Create a `.env` file in the project root:
 GOOGLE_API_KEY=your_gemini_api_key
 ```
 
-Do not commit or upload the `.env` file to GitHub.
+Never upload the `.env` file or expose the API key publicly.
 
 ### 6. Run the application
 
@@ -150,12 +214,12 @@ Do not commit or upload the `.env` file to GitHub.
 python -m streamlit run src/app.py
 ```
 
-The application will open in your browser.
+The application will open in the browser.
 
 ## Streamlit Cloud Deployment
 
-1. Push the project to GitHub.
-2. Open Streamlit Community Cloud.
+1. Open Streamlit Community Cloud.
+2. Connect your GitHub account.
 3. Select the repository:
 
 ```text
@@ -169,7 +233,7 @@ ishika74/hiver-support-agent
 src/app.py
 ```
 
-6. Add the Gemini API key under Streamlit Cloud Secrets:
+6. Add the Gemini API key in Streamlit Cloud Secrets:
 
 ```toml
 GOOGLE_API_KEY = "your_gemini_api_key"
@@ -179,32 +243,49 @@ GOOGLE_API_KEY = "your_gemini_api_key"
 
 ## Evaluation
 
-The repository includes evaluation-related files for testing the system:
+The repository includes evaluation-related scripts and folders.
 
-* `src/run_eval.py`
-* `src/llm_judge.py`
-* `eval/`
+These can be used to assess:
 
-The evaluation process can be used to inspect classification quality, response quality, and escalation behavior.
+* Issue classification
+* Response generation
+* Escalation behavior
+* Overall support-agent performance
+
+The evaluation scripts may require additional Gemini API requests and can be affected by API quota limits.
 
 ## Limitations
 
-* The quality of generated responses depends on the available dataset and AI model.
-* Gemini API usage may be limited by free-tier quotas.
-* The dataset may not cover every possible customer-support issue.
-* AI-generated responses should be reviewed before being used in real customer interactions.
+* The system’s performance depends on the quality and coverage of the dataset.
+* The dataset may not contain examples for every possible customer issue.
+* AI-generated responses may require human review.
+* Gemini API requests may be limited by free-tier quotas.
 * Escalation detection is an assistance feature and does not replace human judgment.
+* The application is a prototype and is not connected to Spotify’s internal customer-support systems.
 
 ## Future Improvements
 
-* Add a larger and more diverse knowledge base.
-* Improve intent classification using a trained machine-learning model.
-* Add conversation-memory support.
+* Add a larger support knowledge base.
+* Improve classification using a trained machine-learning model.
+* Add persistent conversation memory.
 * Add authentication and user management.
-* Add analytics dashboards.
+* Add analytics and monitoring.
 * Add human-agent handoff functionality.
-* Add automated evaluation reports.
-* Add persistent ticket storage.
+* Add persistent support-ticket storage.
+* Improve evaluation with larger test sets.
+* Add automated feedback-based model improvement.
+
+## Security
+
+API keys must be stored using environment variables locally and Streamlit Secrets during deployment.
+
+The following files should never be committed:
+
+```text
+.env
+venv/
+__pycache__/
+```
 
 ## Author
 
