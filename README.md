@@ -290,7 +290,3 @@ __pycache__/
 ## Author
 
 Ishika Razdan
-
-## Repository
-
-https://github.com/ishika74/hiver-support-agent
